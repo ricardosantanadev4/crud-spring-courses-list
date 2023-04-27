@@ -24,7 +24,7 @@ public class CoursesList {
 //	@NotBlank o campo nao pode ser nullo e deve conter pelo menos um caractere que nao seja um espaco em branco
 	@NotBlank
 	@Length(min = 5, max = 100)
-//	@NotNull  o campo nao pode ser nullo e nao pode ser vazio
+//	@NotNull  o campo nao pode ser nullo
 	@NotNull
 	@Column(length = 100, nullable = false)
 	private String name;
