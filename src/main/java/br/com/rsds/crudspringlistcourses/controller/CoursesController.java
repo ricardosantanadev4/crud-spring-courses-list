@@ -11,27 +11,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rsds.crudspringlistcourses.model.CoursesList;
 import br.com.rsds.crudspringlistcourses.repository.CoursesRepository;
+import br.com.rsds.crudspringlistcourses.service.CoursesService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
 
 // @Validated e necessario para as validacoes @NotNull @Positive funcionar 
 @Validated
 @RestController
 @RequestMapping("/api/courses")
-@AllArgsConstructor
+//@AllArgsConstructor
 
 public class CoursesController {
-	CoursesRepository coursesRepository;
+//	private final CoursesRepository coursesRepository;
+	private final CoursesService coursesService;
+
+	public CoursesController(CoursesRepository coursesRepository, CoursesService coursesService) {
+//		this.coursesRepository = coursesRepository;
+		this.coursesService = coursesService;
+	}
 
 	@GetMapping
-	public List<CoursesList> list() {
-		List<CoursesList> course = coursesRepository.findAll();
+	public @ResponseBody List<CoursesList> list() {
+		List<CoursesList> course = coursesService.list();
 		return course;
 	}
 
@@ -39,40 +46,32 @@ public class CoursesController {
 //	Long e do tipo objeto entao ele pode ser null por esse motivo foi adicionado @NotNull
 //	como o id e um numero, e ele pode ser positivo ou negativo por  esse motivo foi adicionado @Positive porque o id não pode ser negativo
 	public ResponseEntity<CoursesList> GetbyId(@PathVariable @NotNull @Positive Long id) {
-		return coursesRepository.findById(id).map(course -> ResponseEntity.ok().body(course))
+		return coursesService.GetbyId(id).map(course -> ResponseEntity.ok().body(course))
 				.orElse(ResponseEntity.notFound().build());
 	}
-
-//	@GetMapping("/{id}")
-//	public ResponseEntity<CoursesList> GetById(@PathVariable @NotNull @Positive Long id) {
-//		return coursesRepository.findById(id).map(recordFind -> {
-//			return ResponseEntity.ok(recordFind);
-//		}).orElse(ResponseEntity.notFound().build());
-//	}
 
 	@PostMapping
 //	@Valid verifica se o json recebido e valido de acor com as validacoes da api do back-end. se ele for valido prossegue com a requisicao se ele for invalido nao procegue com a requisicao
 	public CoursesList create(@RequestBody @Valid CoursesList record) {
-		return coursesRepository.save(record);
-
+		return coursesService.create(record);
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<CoursesList> update(@PathVariable @NotNull @Positive Long id,
 			@RequestBody @Valid CoursesList record) {
-		return coursesRepository.findById(id).map(recordFound -> {
+		return coursesService.GetbyId(id).map(recordFound -> {
 			recordFound.setName(record.getName());
 			recordFound.setCategory(record.getCategory());
-			CoursesList course = coursesRepository.save(recordFound);
+			CoursesList course = coursesService.create(recordFound);
 			return ResponseEntity.ok(course);
 		}).orElse(ResponseEntity.notFound().build());
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> Delete(@PathVariable Long id) {
-		return coursesRepository.findById(id).map(course -> {
-			coursesRepository.deleteById(id);
+		if (coursesService.Delete(id)) {
 			return ResponseEntity.noContent().<Void>build();
-		}).orElse(ResponseEntity.notFound().build());
+		}
+		return ResponseEntity.notFound().build();
 	}
 }
