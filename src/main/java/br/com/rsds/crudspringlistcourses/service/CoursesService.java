@@ -36,7 +36,7 @@ public class CoursesService {
 		return course;
 	}
 
-//	as valigacoes nao foram removidas porque futuramente pode ter um outro Controller que possa chamar esses mesmo método
+//	as validacoes nao foram removidas porque futuramente pode ter um outro Controller que possa chamar esses mesmo método
 	@GetMapping("/{id}")
 	public Optional<CoursesList> GetbyId(@PathVariable @NotNull @Positive Long id) {
 		return coursesRepository.findById(id);
