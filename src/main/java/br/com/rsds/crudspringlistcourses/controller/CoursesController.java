@@ -2,6 +2,7 @@ package br.com.rsds.crudspringlistcourses.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rsds.crudspringlistcourses.model.CoursesList;
@@ -45,13 +47,14 @@ public class CoursesController {
 	@GetMapping("/{id}")
 //	Long e do tipo objeto entao ele pode ser null por esse motivo foi adicionado @NotNull
 //	como o id e um numero, e ele pode ser positivo ou negativo por  esse motivo foi adicionado @Positive porque o id não pode ser negativo
-	public ResponseEntity<CoursesList> GetbyId(@PathVariable @NotNull @Positive Long id) {
-		return coursesService.GetbyId(id).map(course -> ResponseEntity.ok().body(course))
+	public ResponseEntity<CoursesList> FindbyId(@PathVariable @NotNull @Positive Long id) {
+		return coursesService.FindbyId(id).map(course -> ResponseEntity.ok().body(course))
 				.orElse(ResponseEntity.notFound().build());
 	}
 
 	@PostMapping
 //	@Valid verifica se o json recebido e valido de acor com as validacoes da api do back-end. se ele for valido prossegue com a requisicao se ele for invalido nao procegue com a requisicao
+	@ResponseStatus(value = HttpStatus.CREATED)
 	public CoursesList create(@RequestBody @Valid CoursesList record) {
 		return coursesService.create(record);
 	}
@@ -59,12 +62,8 @@ public class CoursesController {
 	@PutMapping("/{id}")
 	public ResponseEntity<CoursesList> update(@PathVariable @NotNull @Positive Long id,
 			@RequestBody @Valid CoursesList record) {
-		return coursesService.GetbyId(id).map(recordFound -> {
-			recordFound.setName(record.getName());
-			recordFound.setCategory(record.getCategory());
-			CoursesList course = coursesService.create(recordFound);
-			return ResponseEntity.ok(course);
-		}).orElse(ResponseEntity.notFound().build());
+		return coursesService.update(id, record).map(recordFound -> ResponseEntity.ok().body(recordFound))
+				.orElse(ResponseEntity.notFound().build());
 	}
 
 	@DeleteMapping("/{id}")
