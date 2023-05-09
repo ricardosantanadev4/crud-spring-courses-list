@@ -46,14 +46,13 @@ public class CoursesController {
 
 	@GetMapping("/{id}")
 //	Long e do tipo objeto entao ele pode ser null por esse motivo foi adicionado @NotNull
-//	como o id e um numero, e ele pode ser positivo ou negativo por  esse motivo foi adicionado @Positive porque o id não pode ser negativo
-	public ResponseEntity<CoursesList> FindbyId(@PathVariable @NotNull @Positive Long id) {
-		return coursesService.FindbyId(id).map(course -> ResponseEntity.ok().body(course))
-				.orElse(ResponseEntity.notFound().build());
+//	como o id e um numero, e ele pode ser positivo ou negativo por  esse motivo foi adicionado @Positive porque o id nao pode ser negativo
+	public CoursesList FindbyId(@PathVariable @NotNull @Positive Long id) {
+		return coursesService.FindbyId(id);
 	}
 
 	@PostMapping
-//	@Valid verifica se o json recebido e valido de acor com as validacoes da api do back-end. se ele for valido prossegue com a requisicao se ele for invalido nao procegue com a requisicao
+//	@Valid verifica se o json recebido e valido de acordo com as validacoes da API do back-end. se ele for valido prossegue com a requisicao se ele for invalido nao procegue com a requisicao
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public CoursesList create(@RequestBody @Valid CoursesList record) {
 		return coursesService.create(record);
@@ -67,7 +66,7 @@ public class CoursesController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> Delete(@PathVariable Long id) {
+	public ResponseEntity<Void> Delete(@PathVariable @NotNull @Positive Long id) {
 		if (coursesService.Delete(id)) {
 			return ResponseEntity.noContent().<Void>build();
 		}

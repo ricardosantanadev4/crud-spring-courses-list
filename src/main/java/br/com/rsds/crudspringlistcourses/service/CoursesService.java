@@ -3,7 +3,6 @@ package br.com.rsds.crudspringlistcourses.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import br.com.rsds.crudspringlistcourses.exception.RecordNotFoundException;
 import br.com.rsds.crudspringlistcourses.model.CoursesList;
 import br.com.rsds.crudspringlistcourses.repository.CoursesRepository;
 import jakarta.validation.Valid;
@@ -38,8 +38,8 @@ public class CoursesService {
 
 //	as validacoes nao foram removidas porque futuramente pode ter um outro Controller que possa chamar esses mesmo método
 	@GetMapping("/{id}")
-	public Optional<CoursesList> FindbyId(@PathVariable @NotNull @Positive Long id) {
-		return coursesRepository.findById(id);
+	public CoursesList FindbyId(@PathVariable @NotNull @Positive Long id) {
+		return coursesRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
 	@PostMapping
