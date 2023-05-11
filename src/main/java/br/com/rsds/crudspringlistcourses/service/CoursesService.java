@@ -49,19 +49,16 @@ public class CoursesService {
 
 //	foi removido tudo que nao e do servico: ResponseEntity, @PathVariable
 	@PutMapping("/{id}")
-	public Optional<CoursesList> update(@NotNull @Positive Long id, @RequestBody @Valid CoursesList record) {
+	public CoursesList update(@NotNull @Positive Long id, @RequestBody @Valid CoursesList record) {
 		return coursesRepository.findById(id).map(recordFound -> {
 			recordFound.setName(record.getName());
 			recordFound.setCategory(record.getCategory());
 			return coursesRepository.save(recordFound);
-		});
+		}).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
 	@DeleteMapping("/{id}")
-	public Boolean Delete(Long id) {
-		return coursesRepository.findById(id).map(course -> {
-			coursesRepository.deleteById(id);
-			return true;
-		}).orElse(false);
+	public void Delete(@PathVariable @NotNull @Positive Long id) {
+		coursesRepository.delete(coursesRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id)));
 	}
 }

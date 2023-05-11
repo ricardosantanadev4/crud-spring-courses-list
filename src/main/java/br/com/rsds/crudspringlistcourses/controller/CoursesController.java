@@ -53,23 +53,19 @@ public class CoursesController {
 
 	@PostMapping
 //	@Valid verifica se o json recebido e valido de acordo com as validacoes da API do back-end. se ele for valido prossegue com a requisicao se ele for invalido nao procegue com a requisicao
-	@ResponseStatus(value = HttpStatus.CREATED)
+	@ResponseStatus(code = HttpStatus.CREATED)
 	public CoursesList create(@RequestBody @Valid CoursesList record) {
 		return coursesService.create(record);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<CoursesList> update(@PathVariable @NotNull @Positive Long id,
-			@RequestBody @Valid CoursesList record) {
-		return coursesService.update(id, record).map(recordFound -> ResponseEntity.ok().body(recordFound))
-				.orElse(ResponseEntity.notFound().build());
+	public CoursesList update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid CoursesList record) {
+		return coursesService.update(id, record);
 	}
 
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> Delete(@PathVariable @NotNull @Positive Long id) {
-		if (coursesService.Delete(id)) {
-			return ResponseEntity.noContent().<Void>build();
-		}
-		return ResponseEntity.notFound().build();
+	public void Delete(@PathVariable @NotNull @Positive Long id) {
+		coursesService.Delete(id);
 	}
 }
