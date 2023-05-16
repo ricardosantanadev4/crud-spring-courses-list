@@ -3,7 +3,6 @@ package br.com.rsds.crudspringlistcourses.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.rsds.crudspringlistcourses.dto.CourseDTO;
 import br.com.rsds.crudspringlistcourses.model.CoursesList;
 import br.com.rsds.crudspringlistcourses.repository.CoursesRepository;
 import br.com.rsds.crudspringlistcourses.service.CoursesService;
@@ -39,9 +39,8 @@ public class CoursesController {
 	}
 
 	@GetMapping
-	public @ResponseBody List<CoursesList> list() {
-		List<CoursesList> course = coursesService.list();
-		return course;
+	public @ResponseBody List<CourseDTO> list() {
+		return coursesService.list();
 	}
 
 	@GetMapping("/{id}")

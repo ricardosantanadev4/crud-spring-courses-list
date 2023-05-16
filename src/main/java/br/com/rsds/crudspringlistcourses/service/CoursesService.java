@@ -1,17 +1,14 @@
 package br.com.rsds.crudspringlistcourses.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import br.com.rsds.crudspringlistcourses.dto.CourseDTO;
 import br.com.rsds.crudspringlistcourses.exception.RecordNotFoundException;
 import br.com.rsds.crudspringlistcourses.model.CoursesList;
 import br.com.rsds.crudspringlistcourses.repository.CoursesRepository;
@@ -30,25 +27,26 @@ public class CoursesService {
 		this.coursesRepository = coursesRepository;
 	}
 
-	@GetMapping
-	public List<CoursesList> list() {
-		List<CoursesList> course = coursesRepository.findAll();
-		return course;
+	public List<CourseDTO> list() {
+		List<CoursesList> courses = coursesRepository.findAll();
+		List<CourseDTO> dto = new ArrayList<>(courses.size());
+		for (CoursesList course : courses) {
+			CourseDTO dtos = new CourseDTO(course.getId(), course.getName(), course.getCategory());
+			dto.add(dtos);
+		}
+		return dto;
 	}
 
 //	as validacoes nao foram removidas porque futuramente pode ter um outro Controller que possa chamar esses mesmo método
-	@GetMapping("/{id}")
 	public CoursesList FindbyId(@PathVariable @NotNull @Positive Long id) {
 		return coursesRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
-	@PostMapping
 	public CoursesList create(@Valid CoursesList record) {
 		return coursesRepository.save(record);
 	}
 
 //	foi removido tudo que nao e do servico: ResponseEntity, @PathVariable
-	@PutMapping("/{id}")
 	public CoursesList update(@NotNull @Positive Long id, @RequestBody @Valid CoursesList record) {
 		return coursesRepository.findById(id).map(recordFound -> {
 			recordFound.setName(record.getName());
@@ -57,7 +55,6 @@ public class CoursesService {
 		}).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
-	@DeleteMapping("/{id}")
 	public void Delete(@PathVariable @NotNull @Positive Long id) {
 		coursesRepository.delete(coursesRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id)));
 	}

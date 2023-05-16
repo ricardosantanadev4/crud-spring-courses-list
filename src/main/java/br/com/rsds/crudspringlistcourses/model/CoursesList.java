@@ -24,7 +24,7 @@ import lombok.Data;
 public class CoursesList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 
 //	@NotBlank o campo nao pode ser nullo e deve conter pelo menos um caractere que nao seja um espaco em branco
 	@NotBlank
