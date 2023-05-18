@@ -46,19 +46,19 @@ public class CoursesController {
 	@GetMapping("/{id}")
 //	Long e do tipo objeto entao ele pode ser null por esse motivo foi adicionado @NotNull
 //	como o id e um numero, e ele pode ser positivo ou negativo por  esse motivo foi adicionado @Positive porque o id nao pode ser negativo
-	public CoursesList FindbyId(@PathVariable @NotNull @Positive Long id) {
+	public CourseDTO FindbyId(@PathVariable @NotNull @Positive Long id) {
 		return coursesService.FindbyId(id);
 	}
 
 	@PostMapping
 //	@Valid verifica se o json recebido e valido de acordo com as validacoes da API do back-end. se ele for valido prossegue com a requisicao se ele for invalido nao procegue com a requisicao
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public CoursesList create(@RequestBody @Valid CoursesList record) {
+	public CourseDTO create(@RequestBody @Valid CourseDTO record) {
 		return coursesService.create(record);
 	}
 
 	@PutMapping("/{id}")
-	public CoursesList update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid CoursesList record) {
+	public CourseDTO update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid CourseDTO record) {
 		return coursesService.update(id, record);
 	}
 
