@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rsds.crudspringlistcourses.dto.CourseDTO;
-import br.com.rsds.crudspringlistcourses.model.CoursesList;
 import br.com.rsds.crudspringlistcourses.repository.CoursesRepository;
 import br.com.rsds.crudspringlistcourses.service.CoursesService;
 import jakarta.validation.Valid;

@@ -47,9 +47,12 @@ public class CoursesService {
 
 //	foi removido tudo que nao e do servico: ResponseEntity, @PathVariable
 	public CourseDTO update(@NotNull @Positive Long id, @RequestBody @Valid @NotNull CourseDTO record) {
-		return coursesRepository.findById(id)
-				.map(recordFound -> courseMapper.toDo(coursesRepository.save(courseMapper.toEntity(record))))
-				.orElseThrow(() -> new RecordNotFoundException(id));
+		return coursesRepository.findById(id).map(recordFound -> {
+			recordFound.setId(record.id());
+			recordFound.setName(record.name());
+			recordFound.setCategory(record.category());
+			return courseMapper.toDo(recordFound);
+		}).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
 	public void Delete(@PathVariable @NotNull @Positive Long id) {
