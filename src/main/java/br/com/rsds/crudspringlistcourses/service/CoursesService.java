@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.rsds.crudspringlistcourses.dto.CourseDTO;
 import br.com.rsds.crudspringlistcourses.dto.mapper.CourseMapper;
+import br.com.rsds.crudspringlistcourses.enums.Category;
 import br.com.rsds.crudspringlistcourses.exception.RecordNotFoundException;
 import br.com.rsds.crudspringlistcourses.repository.CoursesRepository;
 import jakarta.validation.Valid;
@@ -50,7 +51,7 @@ public class CoursesService {
 		return coursesRepository.findById(id).map(recordFound -> {
 			recordFound.setId(record.id());
 			recordFound.setName(record.name());
-			recordFound.setCategory(record.category());
+			recordFound.setCategory(Category.FRONTEND);
 			return courseMapper.toDo(recordFound);
 		}).orElseThrow(() -> new RecordNotFoundException(id));
 	}

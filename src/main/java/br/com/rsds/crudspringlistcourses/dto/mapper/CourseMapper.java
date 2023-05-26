@@ -3,6 +3,7 @@ package br.com.rsds.crudspringlistcourses.dto.mapper;
 import org.springframework.stereotype.Component;
 
 import br.com.rsds.crudspringlistcourses.dto.CourseDTO;
+import br.com.rsds.crudspringlistcourses.enums.Category;
 import br.com.rsds.crudspringlistcourses.model.CoursesList;
 
 // @Component o spring cria uma instacia da classe permitido que ela seja utilizada por outras classes incluido a classe de servico
@@ -15,7 +16,7 @@ public class CourseMapper {
 			return null;
 		}
 
-		return new CourseDTO(course.getId(), course.getName(), course.getCategory());
+		return new CourseDTO(course.getId(), course.getName(), "Front-End");
 	}
 
 	public CoursesList toEntity(CourseDTO courseDTO) {
@@ -31,7 +32,7 @@ public class CourseMapper {
 		}
 
 		course.setName(courseDTO.name());
-		course.setCategory(courseDTO.category());
+		course.setCategory(Category.FRONTEND);
 		return course;
 	}
 }

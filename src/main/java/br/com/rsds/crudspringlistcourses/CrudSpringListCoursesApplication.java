@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import br.com.rsds.crudspringlistcourses.enums.Category;
 import br.com.rsds.crudspringlistcourses.model.CoursesList;
 import br.com.rsds.crudspringlistcourses.repository.CoursesRepository;
 
@@ -21,7 +22,7 @@ public class CrudSpringListCoursesApplication {
 			coursesRepository.deleteAll();
 			CoursesList course = new CoursesList();
 			course.setName("Angular");
-			course.setCategory("Front-end");
+			course.setCategory(Category.FRONTEND);
 			coursesRepository.save(course);
 		};
 	}
