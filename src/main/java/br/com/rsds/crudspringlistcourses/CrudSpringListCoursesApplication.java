@@ -22,7 +22,9 @@ public class CrudSpringListCoursesApplication {
 			coursesRepository.deleteAll();
 			CoursesList course = new CoursesList();
 			course.setName("Angular");
-			course.setCategory(Category.FRONTEND);
+			System.out.println("inserindo a categoria");
+			course.setCategory(Category.BACKEND);
+			System.out.println("Categoria setada em memoria: " + course.getCategory());
 			coursesRepository.save(course);
 		};
 	}

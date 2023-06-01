@@ -39,6 +39,7 @@ public class CoursesList {
 
 	@NotNull
 	@Column(length = 10, nullable = false)
+//	@Convert(converter = CategoryConverter.class) aplica o conversor que vai converter essa informacao para ser salva no banco de dados
 	@Convert(converter = CategoryConverter.class)
 	private Category category;
 

@@ -6,32 +6,39 @@ import br.com.rsds.crudspringlistcourses.enums.Category;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
-// @Converter(autoApply = true) pede para o JPA aplicar essa conversao sempre que for necessario
+// agente pode ter mais de um valor em cada enumerador, 
+// por isso e criada uma classe para que ela possa ser mapeada na model 
+// e o spring saiba examente qual é o valor que deve ser persistido no banco de dados
+
+// como agente que salvar um atributo tipo string no banco dedados  
+// e necessario implementar a interface AttributeConverter<Category, String> e adicionar os metodos da interface
+
+// pede para o JPA aplicar essa conversao sempre que for necessario
 @Converter(autoApply = true)
 public class CategoryConverter implements AttributeConverter<Category, String> {
 
 	@Override
+//	esse metodo e utilizado quando for salvar um valor no banco de dados
+//	recebe o valor do enumerador no atributo Category category
 	public String convertToDatabaseColumn(Category category) {
-		if (category == null) {
-			return null;
-		}
-
+		System.out.println("convertToDatabaseColumn: " + category + " passado no parametro do tipo Category");
+//		retorna o valor do enumerdor como String para ser salvo no banco dedados
 		return category.getValue();
 	}
 
 	@Override
+//	quando for necessario ler um valor do banco de dados esse metodo vai ser utilizado
+//	ele pega o valor tipo String do banco dedados e transforma em um valor do enumerador
 	public Category convertToEntityAttribute(String value) {
+		System.out.println("convertToEntityAttribute: " + value + " passado no parametro do tipo String");
 
-		if (value == null) {
-			return null;
-		}
+//		Stream.of tranformar qualquer array de informacoes em uma Stream
+//		 Category.Values() retorna um array contendo todos os valores dos enumeradores
+//		  .filter(v -> v.getValue().equals(value)) pega um valor do array e realiza uma comparacao booleana
+//		.findFirst() retorna o primerio valor que atende a comparacao booleana do filter, pode ter mais de um valor que atenda, como queremos so o primeiro valor, usamos o first()
+//		.orElseThrow(IllegalArgumentException::new) caso o valor nao seja encontrado vai ser lancada uma excecao em tempo de runtime de execucao informando que esse valor e um argumento invalido
 
-//		Stream.of() e uma classe utilitaria que transforma qualquer array de informacoes em uma stream
-//		Category.values() e um array que contem os todos valores da classe Category
-//		filter() consegue aplicar um filtro pegando o valor e realizando um comparacao booleana
-//		.findFirst() retorna apenas o primeiro valor que for encontrado no .filter() porque o filter poder retornar um array de valores, mas estou interessado apenas no primeiro
-//		.orElseThrow(IllegalArgumentException::new) caso não econtre o valor sera lancada um excecao em tempo de runtime informando que esse agurmento nao e um argumento valido
-		return Stream.of(Category.values()).filter(c -> c.getValue().equals(value)).findFirst()
+		return Stream.of(Category.values()).filter(v -> v.getValue().equals(value)).findFirst()
 				.orElseThrow(IllegalArgumentException::new);
 	}
 
