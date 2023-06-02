@@ -17,7 +17,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-// e uma especializacao de @Component e permite que spring detecte essa classe crie a instancia automaticamente para ela ser usada no controlle de dependencia
+// e uma especializacao de @Component e permite que spring detecte essa classe crie a instancia automaticamente para ela ser usada no controle de dependencia
 @Service
 @Validated
 public class CoursesService {

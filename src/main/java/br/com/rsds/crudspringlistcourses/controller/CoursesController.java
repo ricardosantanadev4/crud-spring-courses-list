@@ -44,7 +44,7 @@ public class CoursesController {
 
 	@GetMapping("/{id}")
 //	Long e do tipo objeto entao ele pode ser null por esse motivo foi adicionado @NotNull
-//	como o id e um numero, e ele pode ser positivo ou negativo por  esse motivo foi adicionado @Positive porque o id nao pode ser negativo
+//	como o id e um numero, ele pode ser positivo ou negativo por  esse motivo foi adicionado @Positive, porque o id nao pode ser negativo
 	public CourseDTO FindbyId(@PathVariable @NotNull @Positive Long id) {
 		return coursesService.FindbyId(id);
 	}

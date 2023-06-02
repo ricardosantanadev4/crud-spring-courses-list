@@ -11,7 +11,7 @@ import br.com.rsds.crudspringlistcourses.model.CoursesList;
 public class CourseMapper {
 
 	public CourseDTO toDo(CoursesList course) {
-//		se o course for null e chamar o  CourseDTO() vai retorna NullPointerException por isso o if()
+//		se o parametro course for null e chamar o  CourseDTO(), vai retornar NullPointerException, por isso o if()
 		if (course == null) {
 			return null;
 		}
@@ -26,7 +26,7 @@ public class CourseMapper {
 		}
 
 		CoursesList course = new CoursesList();
-//		se o id for diferente de null ele seta o id caso contrario que vai gerar o id e banco de dados
+//		se o id for diferente de null ele seta o id, caso contrario quem vai gerar o id e o banco de dados
 		if (courseDTO.id() != null) {
 			course.setId(courseDTO.id());
 		}
