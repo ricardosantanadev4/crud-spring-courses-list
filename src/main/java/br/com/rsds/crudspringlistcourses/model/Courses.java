@@ -5,7 +5,9 @@ import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.rsds.crudspringlistcourses.enums.Category;
+import br.com.rsds.crudspringlistcourses.enums.Status;
 import br.com.rsds.crudspringlistcourses.enums.converters.CategoryConverter;
+import br.com.rsds.crudspringlistcourses.enums.converters.StatusConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -14,17 +16,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Entity
 // @Table(name="Cursos")
 @Data
 // @SQLDelete(sql = "") executa o camando sql passado na string toda vez que o metodo Delete do Repostoriry for chamado ex: deleteById(id) 
-@SQLDelete(sql = "UPDATE COURSES_LIST SET status='Inativo' WHERE id=?")
+@SQLDelete(sql = "UPDATE COURSES SET status='Inativo' WHERE id=?")
 // filtra somente os cursos com status ativo na hora do get
 @Where(clause = "status = 'Ativo'")
-public class CoursesList {
+public class Courses {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -44,10 +45,8 @@ public class CoursesList {
 	@Convert(converter = CategoryConverter.class)
 	private Category category;
 
-	@NotBlank
 	@NotNull
-	@Length(max = 10)
-	@Pattern(regexp = "Ativo|Inativo")
 	@Column(length = 10, nullable = false)
-	private String status = "Ativo";
+	@Convert(converter = StatusConverter.class)
+	private Status status = Status.ACTIVE;
 }

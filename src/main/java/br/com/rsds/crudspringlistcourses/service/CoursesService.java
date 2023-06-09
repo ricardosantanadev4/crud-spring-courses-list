@@ -5,12 +5,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.rsds.crudspringlistcourses.dto.CourseDTO;
 import br.com.rsds.crudspringlistcourses.dto.mapper.CourseMapper;
-import br.com.rsds.crudspringlistcourses.enums.Category;
 import br.com.rsds.crudspringlistcourses.exception.RecordNotFoundException;
 import br.com.rsds.crudspringlistcourses.repository.CoursesRepository;
 import jakarta.validation.Valid;
@@ -32,18 +30,18 @@ public class CoursesService {
 
 	public List<CourseDTO> list() {
 //		.stream() para cada objeto da lista pode ser feita uma acao 
-		return coursesRepository.findAll().stream().map(courseMapper::toDo).collect(Collectors.toList());
+		return coursesRepository.findAll().stream().map(courseMapper::toDto).collect(Collectors.toList());
 	}
 
 //	as validacoes nao foram removidas porque futuramente pode ter um outro Controller que possa chamar esses mesmo método
-	public CourseDTO FindbyId(@PathVariable @NotNull @Positive Long id) {
-		return coursesRepository.findById(id).map(courseMapper::toDo)
+	public CourseDTO FindbyId(@NotNull @Positive Long id) {
+		return coursesRepository.findById(id).map(courseMapper::toDto)
 				.orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
 //	recebe um DTO, converte para Etity .toEntity, salva no banco .save e retorna um DTO .toDTO
 	public CourseDTO create(@Valid @NotNull CourseDTO record) {
-		return courseMapper.toDo(coursesRepository.save(courseMapper.toEntity(record)));
+		return courseMapper.toDto(coursesRepository.save(courseMapper.toEntity(record)));
 	}
 
 //	foi removido tudo que nao e do servico: ResponseEntity, @PathVariable
@@ -51,12 +49,12 @@ public class CoursesService {
 		return coursesRepository.findById(id).map(recordFound -> {
 			recordFound.setId(record.id());
 			recordFound.setName(record.name());
-			recordFound.setCategory(Category.FRONTEND);
-			return courseMapper.toDo(recordFound);
+			recordFound.setCategory(courseMapper.convertCategoryValue(record.category()));
+			return courseMapper.toDto(recordFound);
 		}).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
-	public void Delete(@PathVariable @NotNull @Positive Long id) {
+	public void Delete(@NotNull @Positive Long id) {
 		coursesRepository.delete(coursesRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id)));
 	}
 }
