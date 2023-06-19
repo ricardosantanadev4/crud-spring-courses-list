@@ -4,13 +4,13 @@ import org.springframework.stereotype.Component;
 
 import br.com.rsds.crudspringlistcourses.dto.CourseDTO;
 import br.com.rsds.crudspringlistcourses.enums.Category;
-import br.com.rsds.crudspringlistcourses.model.Courses;
+import br.com.rsds.crudspringlistcourses.model.Course;
 
 // @Component o spring cria uma instacia da classe permitido que ela seja utilizada por outras classes incluido a classe de servico
 @Component
 public class CourseMapper {
 
-	public CourseDTO toDto(Courses course) {
+	public CourseDTO toDto(Course course) {
 //		se o parametro course for null e chamar o  CourseDTO(), vai retornar NullPointerException, por isso o if()
 		if (course == null) {
 			return null;
@@ -19,13 +19,13 @@ public class CourseMapper {
 		return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue());
 	}
 
-	public Courses toEntity(CourseDTO courseDTO) {
+	public Course toEntity(CourseDTO courseDTO) {
 
 		if (courseDTO == null) {
 			return null;
 		}
 
-		Courses course = new Courses();
+		Course course = new Course();
 //		se o id for diferente de null ele seta o id, caso contrario quem vai gerar o id e o banco de dados
 		if (courseDTO.id() != null) {
 			course.setId(courseDTO.id());
