@@ -55,12 +55,11 @@ public class Course {
 	@Convert(converter = StatusConverter.class)
 	private Status status = Status.ACTIVE;
 
-//	@OneToMany indica a maneira que o array vai ser persistido no banco de dados
-//	cascade = CascadeType.ALL sempre que ocorrer uma mudanca na entidade ele foi adicionando, essas mudancas serao passadas para as classes filhas dessa etidade
-//	orphanRemoval = true quando algo for removido na endidade pair a remacao tambem vai ser feita na etidade filha ex: quando remover um curso em Courses as aulas desse curso serao removidas em Lesson
-//	mappedBy = "Courses" define que a classe Course e dona desse relacionamento. necessario para nao fazer um update quando for adicionar a coluna course_id 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "course")
-//	@JoinColumn(name = "course_id") cria uma coluna com o nome course_id na tabela da entidade Lesson com a chave primaria do curso que nesse caso e o  id, se nao usar o joinColumn o sistema vai criar 3 tabelas que nao e recomendado para @OneToMany, so e recomendo para relacao de muitos para muitos que nao e o caso 
-//	@JoinColumn(name = "course_id")
+//	@OneToMany indica a maneira que o array vai ser persistido no banco de dados, um curso tem varias aulas por isso @OneToMany
+//	cascade = CascadeType.ALL sempre que ocorrer uma mudanca na entidade ele foi adicionando, essas mudancas serao passadas para as classes filhas dessa etidade, sem nao for adicionada va apresentar TransientPropertyValueException
+//	orphanRemoval = true quando um curso for removido as a aulas relacionadas a esse curso que ficarem orfans tambem serao removidas 
+//	mappedBy = "Courses" define que a classe Course e dona desse relacionamento informando na String do mappedBy o nome da coluna na classe filha que tem a chave primaria da classe principal . com isso e possivel criar essa coluna na propria classe filha sem precisar de fazer um update para criar essa coluna, tambem evita do sistema criar uma terceira tabela 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
+//	@JoinColumn(name = "course_id") quando adicionado na classe principal no lugar do mappedBy ele precisa fazer um update para criar a coluna na classe filha que tem a chave primaria da classe principal, por isso nao e recomendado adicionar na classe principal
 	private List<Lesson> lessons = new ArrayList<>();
 }

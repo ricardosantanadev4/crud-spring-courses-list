@@ -26,16 +26,23 @@ public class CrudSpringListCoursesApplication {
 			Course course = new Course();
 			course.setName("Angular");
 			System.out.println("inserindo a categoria");
-			course.setCategory(Category.BACKEND);
+			course.setCategory(Category.FRONTEND);
 			System.out.println("Categoria setada em memoria: " + course.getCategory());
 
-			Lesson lesson = new Lesson();
-			lesson.setName("Introdução");
-			lesson.setYoutubeURL("oEhX1TYckCo");
-//			como o objeto tipo Course foi setado primeiro no banco de dados, o id foi desse objeto foi gerado automaticamente,com isso e possivel setar o id do Obejeto na coluna course_id do mapeamento realacional da Classe Lesson
-//			dessa forma so e feito 2 insert's no banco de dados, no lugar de 3 aumentando o desempenho
-			lesson.setCourse(course);
-			course.getLessons().add(lesson);
+			Lesson l = new Lesson();
+			l.setName("Introdução");
+			l.setYoutubeURL("oEhX1TYckCo");
+			l.setCourse(course);
+
+//			como o objeto tipo Course foi setado primeiro, o id foi desse objeto foi gerado automaticamente,com isso e possivel adicionar o objeto courser no array
+			course.getLessons().add(l);
+
+			Lesson l1 = new Lesson();
+			l1.setName("Angular");
+			l1.setYoutubeURL("oEhX1TYckC1");
+			l1.setCourse(course);
+
+			course.getLessons().add(l1);
 			coursesRepository.save(course);
 		};
 	}
