@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import br.com.rsds.crudspringlistcourses.enums.Category;
 import br.com.rsds.crudspringlistcourses.model.Course;
 import br.com.rsds.crudspringlistcourses.model.Lesson;
-import br.com.rsds.crudspringlistcourses.repository.CoursesRepository;
+import br.com.rsds.crudspringlistcourses.repository.CourseRepository;
 
 @SpringBootApplication
 public class CrudSpringListCoursesApplication {
@@ -18,32 +18,40 @@ public class CrudSpringListCoursesApplication {
 	}
 
 	@Bean
-	CommandLineRunner initDataBase(CoursesRepository coursesRepository) {
+	CommandLineRunner initDataBase(CourseRepository coursesRepository) {
 		return args -> {
 
 			coursesRepository.deleteAll();
 
-			Course course = new Course();
-			course.setName("Angular");
-			System.out.println("inserindo a categoria");
-			course.setCategory(Category.FRONTEND);
-			System.out.println("Categoria setada em memoria: " + course.getCategory());
+			for (int i = 0; i < 20; i++) {
 
-			Lesson l = new Lesson();
-			l.setName("Introdução");
-			l.setYoutubeURL("oEhX1TYckCo");
-			l.setCourse(course);
+				Course course = new Course();
 
-//			como o objeto tipo Course foi setado primeiro, o id foi desse objeto foi gerado automaticamente,com isso e possivel adicionar o objeto courser no array
-			course.getLessons().add(l);
+				course.setName("Angular - " + i);
+				course.setCategory(Category.FRONTEND);
 
-			Lesson l1 = new Lesson();
-			l1.setName("Angular");
-			l1.setYoutubeURL("oEhX1TYckC1");
-			l1.setCourse(course);
+				Lesson l = new Lesson();
+				l.setName("Introdução - " + i);
+				l.setYoutubeURL("oEhX1TYckCo");
+				l.setCourse(course);
 
-			course.getLessons().add(l1);
-			coursesRepository.save(course);
+				/*
+				 * como o objeto tipo Course foi setado primeiro, o id foi desse objeto foi
+				 * gerado automaticamente,com isso e possivel adicionar o objeto courser no
+				 * array
+				 */
+				course.getLessons().add(l);
+
+				Lesson l1 = new Lesson();
+				l1.setName("Angular - " + i);
+				l1.setYoutubeURL("oEhX1TYckC1");
+				l1.setCourse(course);
+
+				course.getLessons().add(l1);
+				coursesRepository.save(course);
+
+			}
+
 		};
 	}
 }

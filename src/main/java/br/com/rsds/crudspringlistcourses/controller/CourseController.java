@@ -1,7 +1,5 @@
 package br.com.rsds.crudspringlistcourses.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,15 +9,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rsds.crudspringlistcourses.dto.CourseDTO;
-import br.com.rsds.crudspringlistcourses.repository.CoursesRepository;
-import br.com.rsds.crudspringlistcourses.service.CoursesService;
+import br.com.rsds.crudspringlistcourses.dto.PageDTO;
+import br.com.rsds.crudspringlistcourses.repository.CourseRepository;
+import br.com.rsds.crudspringlistcourses.service.CourseService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 // @Validated e necessario para as validacoes @NotNull @Positive funcionar 
 @Validated
@@ -27,19 +29,25 @@ import jakarta.validation.constraints.Positive;
 @RequestMapping("/api/courses")
 //@AllArgsConstructor
 
-public class CoursesController {
+public class CourseController {
 //	private final CoursesRepository coursesRepository;
-	private final CoursesService coursesService;
+	private final CourseService coursesService;
 
-	public CoursesController(CoursesRepository coursesRepository, CoursesService coursesService) {
+	public CourseController(CourseRepository coursesRepository, CourseService coursesService) {
 //		this.coursesRepository = coursesRepository;
 		this.coursesService = coursesService;
 	}
 
 	@GetMapping
-	public List<CourseDTO> list() {
-		return coursesService.list();
+	public PageDTO list(@RequestParam(defaultValue = "0") @PositiveOrZero int pageNumber,
+			@RequestParam(defaultValue = "10") @Positive @Max(10) int pageSize) {
+		return coursesService.list(pageNumber, pageSize);
 	}
+
+//	@GetMapping
+//	public List<CourseDTO> list() {
+//		return coursesService.list();
+//	}
 
 	@GetMapping("/{id}")
 //	Long e do tipo objeto entao ele pode ser null por esse motivo foi adicionado @NotNull

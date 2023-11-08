@@ -25,11 +25,18 @@ import lombok.Data;
 
 @Entity
 // @Table(name="Cursos")
+
 @Data
-// @SQLDelete(sql = "") executa o camando sql passado na string toda vez que o metodo Delete do Repostoriry for chamado ex: deleteById(id) 
+
+/*
+ * @SQLDelete(sql = "") executa o camando sql passado na string toda vez que o
+ * metodo Delete do Repostoriry for chamado ex: deleteById(id)
+ */
 @SQLDelete(sql = "UPDATE COURSES SET status='Inativo' WHERE id=?")
+
 // filtra somente os cursos com status ativo na hora do get
 @Where(clause = "status = 'Ativo'")
+
 public class Course {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,8 +52,6 @@ public class Course {
 
 	@NotNull
 	@Column(length = 10, nullable = false)
-//	@Convert(converter = CategoryConverter.class) aplica o conversor que vai converter esse atributo para um coluna valida e assim poder ser salvo no banco de dados
-//  ou converte essa informacao da coluna do banco de dados para Enum quando é feito um get no banco
 	@Convert(converter = CategoryConverter.class)
 	private Category category;
 

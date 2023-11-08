@@ -11,6 +11,10 @@ import jakarta.validation.constraints.Pattern;
 
 public record CourseDTO(Long id, @NotBlank @NotNull @Length(min = 5, max = 100) String name,
 		@NotBlank @NotNull @Length(max = 10) @Pattern(regexp = "Back-End|Front-End") String category,
-		List<Lesson> lesson) {
+		/*
+		 * para exibir somente o array no console e necessario que o atributo da
+		 * interface do front-end tenha o mesmo nome do atribudo do banck-end
+		 */
+		List<Lesson> lessons) {
 
 }

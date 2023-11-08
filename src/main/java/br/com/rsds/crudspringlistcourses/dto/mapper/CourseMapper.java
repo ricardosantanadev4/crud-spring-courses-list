@@ -11,12 +11,11 @@ import br.com.rsds.crudspringlistcourses.model.Course;
 public class CourseMapper {
 
 	public CourseDTO toDto(Course course) {
-//		se o parametro course for null e chamar o  CourseDTO(), vai retornar NullPointerException, por isso o if()
 		if (course == null) {
 			return null;
 		}
 
-		return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue(),course.getLessons());
+		return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue(), course.getLessons());
 	}
 
 	public Course toEntity(CourseDTO courseDTO) {
@@ -26,25 +25,25 @@ public class CourseMapper {
 		}
 
 		Course course = new Course();
-//		se o id for diferente de null ele seta o id, caso contrario quem vai gerar o id e o banco de dados
 		if (courseDTO.id() != null) {
 			course.setId(courseDTO.id());
 		}
 
 		course.setName(courseDTO.name());
-//		courseDTO.category() e do tipo string nas validacoes do CourseDTO, e course.setCategory() e do Category, por isso o uso do metodo convertCategoryValue(String value)
 		course.setCategory(convertCategoryValue(courseDTO.category()));
 		return course;
 	}
 
-//	recebe o valor um valor do tipo String e retorna uma categria do Tipo Category
 	public Category convertCategoryValue(String value) {
 
 		if (value == null) {
 			return null;
 		}
 
-//		se existir uma categoria relacionada ao valor retorna a categoria que e do tipo Category, caso contrario retorna uma excecao
+		/*
+		 * se existir uma categoria relacionada ao valor retorna a categoria que e do
+		 * tipo Category, caso contrario retorna uma excecao
+		 */
 		return switch (value) {
 		case "Front-End" -> Category.FRONTEND;
 		case "Back-End" -> Category.BACKEND;

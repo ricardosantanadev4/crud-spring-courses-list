@@ -3,37 +3,58 @@ package br.com.rsds.crudspringlistcourses.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.rsds.crudspringlistcourses.dto.CourseDTO;
+import br.com.rsds.crudspringlistcourses.dto.PageDTO;
 import br.com.rsds.crudspringlistcourses.dto.mapper.CourseMapper;
 import br.com.rsds.crudspringlistcourses.exception.RecordNotFoundException;
-import br.com.rsds.crudspringlistcourses.repository.CoursesRepository;
+import br.com.rsds.crudspringlistcourses.model.Course;
+import br.com.rsds.crudspringlistcourses.repository.CourseRepository;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
-// e uma especializacao de @Component e permite que spring detecte essa classe crie a instancia automaticamente para ela ser usada no controle de dependencia
+/* e uma especializacao de @Component e permite que spring detecte essa classe crie a instancia automaticamente para 
+ * ela ser usada no controle de dependencia 
+ */
 @Service
 @Validated
-public class CoursesService {
-	private final CoursesRepository coursesRepository;
+public class CourseService {
+	private final CourseRepository coursesRepository;
 	private final CourseMapper courseMapper;
 
-//	nao faz muito sentido usar o @AllArgsConstructor so para fazer a injecao da classe CoursesRepository no CoursesService, por isso a injecao e feita dessa forma usando o construtor
-	public CoursesService(CoursesRepository coursesRepository, CourseMapper courseMapper) {
+	/*
+	 * nao faz muito sentido usar o @AllArgsConstructor so para fazer a injecao da
+	 * classe CoursesRepository no CoursesService, por isso a injecao e feita dessa
+	 * forma usando o construtor
+	 */
+	public CourseService(CourseRepository coursesRepository, CourseMapper courseMapper) {
 		this.coursesRepository = coursesRepository;
 		this.courseMapper = courseMapper;
 	}
 
-	public List<CourseDTO> list() {
-//		.stream() para cada objeto da lista pode ser feita uma acao 
-		return coursesRepository.findAll().stream().map(courseMapper::toDto).collect(Collectors.toList());
+	public PageDTO list(@PositiveOrZero int pageNumber, @Positive @Max(10) int pageSize) {
+		Page<Course> page = coursesRepository.findAll(PageRequest.of(pageNumber, pageSize));
+		List<CourseDTO> coures = page.get().map(courseMapper::toDto).collect(Collectors.toList());
+		return new PageDTO(coures, page.getTotalElements(), page.getTotalPages());
 	}
 
-//	as validacoes nao foram removidas porque futuramente pode ter um outro Controller que possa chamar esses mesmo método
+//	public List<CourseDTO> list() {
+////		.stream() utilizado em lista, como isso pode ser feita uma cao em cada elemento da lista 
+//		return coursesRepository.findAll().stream().map(courseMapper::toDto).collect(Collectors.toList());
+//	}
+
+	/*
+	 * as validacoes nao foram removidas porque futuramente pode ter um outro
+	 * Controller que possa chamar esses mesmo metodo
+	 */
 	public CourseDTO FindbyId(@NotNull @Positive Long id) {
 		return coursesRepository.findById(id).map(courseMapper::toDto)
 				.orElseThrow(() -> new RecordNotFoundException(id));
