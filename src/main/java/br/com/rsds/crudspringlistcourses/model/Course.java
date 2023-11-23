@@ -23,10 +23,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+@Data
+
 @Entity
 // @Table(name="Cursos")
-
-@Data
 
 /*
  * @SQLDelete(sql = "") executa o camando sql passado na string toda vez que o
@@ -44,9 +44,9 @@ public class Course {
 
 //	@NotBlank o campo nao pode ser nullo e deve conter pelo menos um caractere que nao seja um espaco em branco
 	@NotBlank
-	@Length(min = 5, max = 100)
 //	@NotNull  o campo nao pode ser nullo
 	@NotNull
+	@Length(min = 5, max = 100)
 	@Column(length = 100, nullable = false)
 	private String name;
 
@@ -60,11 +60,26 @@ public class Course {
 	@Convert(converter = StatusConverter.class)
 	private Status status = Status.ACTIVE;
 
-//	@OneToMany indica a maneira que o array vai ser persistido no banco de dados, um curso tem varias aulas por isso @OneToMany
-//	cascade = CascadeType.ALL sempre que ocorrer uma mudanca na entidade ele foi adicionando, essas mudancas serao passadas para as classes filhas dessa etidade, sem nao for adicionada va apresentar TransientPropertyValueException
-//	orphanRemoval = true quando um curso for removido as a aulas relacionadas a esse curso que ficarem orfans tambem serao removidas 
-//	mappedBy = "Courses" define que a classe Course e dona desse relacionamento informando na String do mappedBy o nome da coluna na classe filha que tem a chave primaria da classe principal . com isso e possivel criar essa coluna na propria classe filha sem precisar de fazer um update para criar essa coluna, tambem evita do sistema criar uma terceira tabela 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
-//	@JoinColumn(name = "course_id") quando adicionado na classe principal no lugar do mappedBy ele precisa fazer um update para criar a coluna na classe filha que tem a chave primaria da classe principal, por isso nao e recomendado adicionar na classe principal
+	/*
+	 * @OneToMany indica a maneira que o array vai ser persistido no banco de dados,
+	 * um curso tem varias aulas por isso @OneToMany cascade = CascadeType.ALL
+	 * sempre que ocorrer uma mudanca na entidade ele foi adicionando, essas
+	 * mudancas serao passadas para as classes filhas dessa etidade, sem nao for
+	 * adicionada va apresentar TransientPropertyValueException orphanRemoval = true
+	 * quando um curso for removido as a aulas relacionadas a esse curso que ficarem
+	 * orfans tambem serao removidas mappedBy = "Courses" define que a classe Course
+	 * e dona desse relacionamento informando na String do mappedBy o nome da coluna
+	 * na classe filha que tem a chave primaria da classe principal . com isso e
+	 * possivel criar essa coluna na propria classe filha sem precisar de fazer um
+	 * update para criar essa coluna, tambem evita do sistema criar uma terceira
+	 * tabela
+	 */
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "course")
+	/*
+	 * @JoinColumn(name = "course_id") quando adicionado na classe principal no
+	 * lugar do mappedBy ele precisa fazer um update para criar a coluna na classe
+	 * filha que tem a chave primaria da classe principal, por isso nao e
+	 * recomendado adicionar na classe principal
+	 */
 	private List<Lesson> lessons = new ArrayList<>();
 }

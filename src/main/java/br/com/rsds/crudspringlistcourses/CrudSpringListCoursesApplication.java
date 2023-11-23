@@ -23,7 +23,7 @@ public class CrudSpringListCoursesApplication {
 
 			coursesRepository.deleteAll();
 
-			for (int i = 0; i < 20; i++) {
+			for (int i = 0; i < 2; i++) {
 
 				Course course = new Course();
 
@@ -37,7 +37,7 @@ public class CrudSpringListCoursesApplication {
 
 				/*
 				 * como o objeto tipo Course foi setado primeiro, o id foi desse objeto foi
-				 * gerado automaticamente,com isso e possivel adicionar o objeto courser no
+				 * gerado automaticamente,com isso e possivel adicionar o objeto course no
 				 * array
 				 */
 				course.getLessons().add(l);

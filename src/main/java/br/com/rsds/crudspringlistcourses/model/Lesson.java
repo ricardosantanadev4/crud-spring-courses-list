@@ -29,7 +29,7 @@ public class Lesson {
 //	 @ManyToOne quando e adicionado o mappedBy na classe principal e necessrio criar essa anotacao indicando o relacionamento entre as classes, nesse caso sao varias aulas para um curso 
 //	fetch = FetchType.LAZY indica que esse mapeamento so vai ser carregado quando for chamado .get dessa licao
 //	optional = true indicia que a coluna course_id e obrigatoria, e ela vai ter que esta sempre populada
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "course_id", nullable = false)
 //	para evitar o update n+1 foi feito o @ManyToOne nesse atributo, como isso gerou uma dependecia circular, para evitar esse problema e adicionado @JsonProperty(access = Access.WRITE_ONLY), pois quando chegar nesse ponto o sistema nao vai fazer um novo select evitando o loop
 	@JsonProperty(access = Access.WRITE_ONLY)
