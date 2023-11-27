@@ -48,14 +48,22 @@ public class CourseController {
 	}
 
 	@GetMapping("/{id}")
-//	Long e do tipo objeto entao ele pode ser null por esse motivo foi adicionado @NotNull
-//	como o id e um numero, ele pode ser positivo ou negativo por  esse motivo foi adicionado @Positive, porque o id nao pode ser negativo
+	/*
+	 * Long e do tipo objeto entao ele pode ser null por esse motivo foi
+	 * adicionado @NotNull // como o id e um numero, ele pode ser positivo ou
+	 * negativo por esse motivo foi adicionado @Positive, porque o id nao pode ser
+	 * negativo
+	 */
 	public CourseDTO FindbyId(@PathVariable @NotNull @Positive Long id) {
 		return coursesService.FindbyId(id);
 	}
 
 	@PostMapping
-//	@Valid verifica se o json recebido e valido de acordo com as validacoes da API do back-end. se ele for valido prossegue com a requisicao se ele for invalido nao procegue com a requisicao
+	/*
+	 * @Valid verifica se o json recebido e valido de acordo com as validacoes da
+	 * API do back-end. se ele for valido prossegue com a requisicao se ele for
+	 * invalido nao procegue com a requisicao
+	 */
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public CourseDTO create(@RequestBody @Valid CourseDTO record) {
 		System.out.println("post >> " + record);

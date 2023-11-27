@@ -19,11 +19,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-
-@Data
 
 @Entity
 // @Table(name="Cursos")
@@ -81,5 +80,50 @@ public class Course {
 	 * filha que tem a chave primaria da classe principal, por isso nao e
 	 * recomendado adicionar na classe principal
 	 */
+	@NotNull
+	@NotEmpty
+//	@Valid cada licao precisa ser valida
+	@Valid
 	private List<Lesson> lessons = new ArrayList<>();
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(@NotBlank @NotNull @Length(min = 5, max = 100) String name) {
+		this.name = name;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(@NotNull Category category) {
+		this.category = category;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(@NotNull Status status) {
+		this.status = status;
+	}
+
+	public List<Lesson> getLessons() {
+		return lessons;
+	}
+
+	public void setLessons(List<Lesson> lessons) {
+		this.lessons = lessons;
+	}
+
 }
